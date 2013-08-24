@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="uk.co.ilee.cordova.social-message" version="0.1.0">
+    <name>Social Message</name>
+    <description>Cordova Social Message Plugin to utilise native share features.</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova, social, message, share, facebook, twitter</keywords>
+    <engines>
+        <engine name="cordova" version=">=3.0" />
+    </engines>
+    <js-module src="www/social-message.js" name="SocialMessage">
+        <clobbers target="SocialMessage" />
+    </js-module>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="SocialMessage">
+                <param name="ios-package" value="SocialMessage" /> 
+            </feature>
+        </config-file>
+        <header-file src="src/ios/SocialMessage.h" />
+        <source-file src="src/ios/SocialMessage.m" />
+        <framework src="SystemConfiguration.framework" weak="true" />
+    </platform>
+</plugin>
