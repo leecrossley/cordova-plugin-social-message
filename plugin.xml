@@ -3,18 +3,17 @@
     <name>Social Message</name>
     <author>Lee Crossley (http://ilee.co.uk/)</author>
     <description>Cordova Social Message Plugin to utilise native share features.</description>
-    <license>Apache 2.0</license>
     <keywords>cordova, social, message, share, facebook, twitter</keywords>
     <engines>
         <engine name="cordova" version=">=3.0" />
     </engines>
     <js-module src="www/social-message.js" name="SocialMessage">
-        <clobbers target="SocialMessage" />
+        <clobbers target="socialmessage" />
     </js-module>
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
             <feature name="SocialMessage">
-                <param name="ios-package" value="SocialMessage" /> 
+                <param name="ios-package" value="SocialMessage" />
             </feature>
         </config-file>
         <header-file src="src/ios/SocialMessage.h" />
