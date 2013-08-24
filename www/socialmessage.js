@@ -18,7 +18,8 @@ SocialMessage.prototype.send = function (message, activityTypes) {
         "message": message,
         "activityTypes": activityTypes.join(",")
     };
-    cordova.exec(null, null, "SocialMessage", "send", [options]);
+    console.log([options]);
+    exec(null, null, "SocialMessage", "send", [options]);
 };
 
 module.exports = new SocialMessage();

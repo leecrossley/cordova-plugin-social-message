@@ -1,15 +1,12 @@
 //
 //  SocialMessage.h
-//  Copyright (c) 2013 Lee Crossley - http://ilee.co.uk. All rights reserved.
+//  Copyright (c) 2013 Lee Crossley - http://ilee.co.uk
 //
 
+#import "Cordova/CDV.h"
 #import "Foundation/Foundation.h"
-#import "MessageUI/MFMailComposeViewController.h"
-#import "Cordova/CDVPlugin.h"
 
-@interface SocialMessage : CDVPlugin <MFMailComposeViewControllerDelegate> {
-
-}
+@interface SocialMessage : CDVPlugin
 
 - (void) send:(CDVInvokedUrlCommand*)command;
 
