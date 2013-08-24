@@ -56,9 +56,6 @@
     activity.excludedActivityTypes = exclusions;
 
     [self.viewController presentViewController:activity animated:YES completion:Nil];
-
-    [exclusions release];
-    [activity release];
 }
 
 - (void) sendEmailFallback:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options
@@ -75,7 +72,6 @@
         [composer setMessageBody:message isHTML:FALSE];
         
         [self.viewController presentModalViewController:composer animated:TRUE];
-        [composer release];
     }
     else
     {
