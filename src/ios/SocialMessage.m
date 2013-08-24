@@ -9,8 +9,8 @@
 
 - (void) send:(CDVInvokedUrlCommand*)command;
 {
-    NSString *message = [command.arguments objectForKey:@"message"];
-    NSArray *activityTypes = [[ommand.arguments  objectForKey:@"activityTypes"] componentsSeparatedByString:@","];
+    NSString *message = [command.arguments objectAtIndex:0];
+    NSArray *activityTypes = [[command.arguments objectAtIndex:1] componentsSeparatedByString:@","];
 
     UIActivityViewController *activity = [[UIActivityViewController alloc] initWithActivityItems:@[message] applicationActivities:Nil];
 
