@@ -10,8 +10,9 @@
 
 - (void) send:(CDVInvokedUrlCommand*)command;
 {
-    NSString *message = [command.arguments objectAtIndex:0];
-    NSArray *activityTypes = [[command.arguments objectAtIndex:1] componentsSeparatedByString:@","];
+    NSMutableDictionary *args = [command.arguments objectAtIndex:0];
+    NSString *message = [args objectForKey:@"message"];
+    NSArray *activityTypes = [[args objectForKey:@"activityTypes"] componentsSeparatedByString:@","];
 
     UIActivityViewController *activity = [[UIActivityViewController alloc] initWithActivityItems:@[message] applicationActivities:Nil];
 
@@ -57,11 +58,6 @@
     activity.excludedActivityTypes = exclusions;
 
     [self.viewController presentViewController:activity animated:YES completion:Nil];
-}
-
-- (void) mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
-{
-    [self.viewController dismissModalViewControllerAnimated:TRUE];
 }
 
 @end
