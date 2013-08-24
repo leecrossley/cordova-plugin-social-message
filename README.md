@@ -1,4 +1,4 @@
-# Social Message for Apache Cordova
+## Social Message Plugin for Apache Cordova
 
 Cordova Plugin to utilise native share features. Developed for Apache Cordova CLI >= 3.0.0.
 
@@ -19,7 +19,7 @@ cordova plugin add https://github.com/leecrossley/cordova-plugin-social-message.
 After your deviceready event has been fired, you can simply pass your message as an argument:
 
 ```
-window.plugins.socialmessage.send("This is a test message");
+window.socialmessage.send("This is a test message");
 ```
 
 Which will allow the message to be shared with all built in activity types.
@@ -27,13 +27,13 @@ Which will allow the message to be shared with all built in activity types.
 If you want to specify activity types to include, you can add an array argument such as:
 
 ```
-window.plugins.socialmessage.send("This is a test message", ["PostToFacebook", "PostToTwitter"]);
+window.socialmessage.send("This is a test message", ["PostToFacebook", "PostToTwitter"]);
 ```
 
 This example will only allow the user to post the message to Facebook or Twitter.
 
 A complete list of activity types can be found [here](http://developer.apple.com/library/ios/#documentation/UIKit/Reference/UIActivity_Class/Reference/Reference.html#//apple_ref/occ/cl/UIActivity). You should omit the "UIActivityType" prefix when adding to your array.
 
-## Limitations
+## Platforms
 
-Currently iOS only - check back in a couple of days for Android and Windows Phone 8.
+Currently iOS only - check back soon for Android and Windows Phone 8 support.
