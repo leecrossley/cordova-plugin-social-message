@@ -11,10 +11,30 @@
 - (void) send:(CDVInvokedUrlCommand*)command;
 {
     NSMutableDictionary *args = [command.arguments objectAtIndex:0];
-    NSString *message = [args objectForKey:@"message"];
+    NSString *text = [args objectForKey:@"text"];
+    NSString *url = [args objectForKey:@"url"];
+    NSString *image = [args objectForKey:@"image"];
+    NSString *subject = [args objectForKey:@"subject"];
     NSArray *activityTypes = [[args objectForKey:@"activityTypes"] componentsSeparatedByString:@","];
 
-    UIActivityViewController *activity = [[UIActivityViewController alloc] initWithActivityItems:@[message] applicationActivities:Nil];
+    NSMutableArray *items = [NSMutableArray new];
+    if (text)
+    {
+        [items addObject:text];
+    }
+    if (url)
+    {
+        NSURL *formattedUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@", url]];
+        [items addObject:formattedUrl];
+    }
+    if (image)
+    {
+        UIImage *imageFromUrl = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@", image]]]];
+        [items addObject:imageFromUrl];
+    }
+
+    UIActivityViewController *activity = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:Nil];
+    [activity setValue:subject forKey:@"subject"];
 
     NSMutableArray *exclusions = [[NSMutableArray alloc] init];
 

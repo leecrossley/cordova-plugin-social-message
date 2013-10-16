@@ -5,21 +5,17 @@ var SocialMessage = function () {
     this.name = "SocialMessage";
 };
 
-function getAllActivityTypes() {
-    return ["PostToFacebook", "PostToTwitter", "PostToWeibo", "Message",
-        "Mail", "Print", "CopyToPasteboard", "AssignToContact", "SaveToCameraRoll"];
-}
+var allActivityTypes = ["PostToFacebook", "PostToTwitter", "PostToWeibo", "Message", "Mail", "Print", "CopyToPasteboard", "AssignToContact", "SaveToCameraRoll"];
 
-SocialMessage.prototype.send = function (message, activityTypes) {
-    if (typeof (activityTypes) === "undefined" || activityTypes === null) {
-        activityTypes = getAllActivityTypes();
+SocialMessage.prototype.send = function (message) {
+    if (!message) {
+        return;
     }
-    var options = {
-        "message": message,
-        "activityTypes": activityTypes.join(",")
-    };
-    console.log([options]);
-    exec(null, null, "SocialMessage", "send", [options]);
+    if (typeof (message.activityTypes) === "undefined" || message.activityTypes === null || message.activityTypes.length === 0) {
+        message.activityTypes = allActivityTypes;
+    }
+    message.activityTypes = message.activityTypes.join(",");
+    exec(null, null, "SocialMessage", "send", [message]);
 };
 
 module.exports = new SocialMessage();
