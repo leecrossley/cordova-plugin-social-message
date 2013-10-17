@@ -25,7 +25,7 @@ public class SocialMessage extends CordovaPlugin {
         Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
         sendIntent.setType("text/plain");
         sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
-        sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject)
+        sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
         this.cordova.startActivityForResult(this, sendIntent, 0);
     }
 
