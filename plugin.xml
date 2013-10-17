@@ -21,7 +21,7 @@
     </platform>
     <platform name="android">
         <config-file target="config.xml" parent="/*">
-            <feature name="Share">
+            <feature name="SocialMessage">
                 <param name="android-package" value="uk.co.ilee.socialmessage.SocialMessage" />
             </feature>
         </config-file>
