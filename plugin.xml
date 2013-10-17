@@ -19,4 +19,12 @@
         <header-file src="src/ios/SocialMessage.h" />
         <source-file src="src/ios/SocialMessage.m" />
     </platform>
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Share">
+                <param name="android-package" value="uk.co.ilee.socialmessage.SocialMessage" />
+            </feature>
+        </config-file>
+        <source-file src="src/android/SocialMessage.java" target-dir="src/uk/co/ilee/socialmessage" />
+    </platform>
 </plugin>

@@ -27,7 +27,7 @@ window.socialmessage.send(message);
 
 This example will allow the message to be shared with all built in activity types.
 
-### Specify activity types
+### Specify activity types (iOS only)
 
 To specify activity types to include as options for the user, add an "activityTypes" array to your message:
 
@@ -56,7 +56,7 @@ var message = {
 window.socialmessage.send(message);
 ```
 
-### Share a message with a url
+### Share a message with a url (iOS only - for now)
 
 To add a link to your message, use the "url" property:
 
@@ -68,7 +68,7 @@ var message = {
 window.socialmessage.send(message);
 ```
 
-### Share a message with an image
+### Share a message with an image (iOS only - for now)
 
 To add an image to your message, use the "image" property:
 
@@ -82,4 +82,4 @@ window.socialmessage.send(message);
 
 ## Platforms
 
-Currently iOS only - check back soon for Android and Windows Phone 8 support.
+Currently supporting iOS and Android - check back soon for Windows Phone 8 support.
