@@ -74,9 +74,7 @@ public class SocialMessage extends CordovaPlugin {
 				public void run() {
 					try {
 						saveImage(url, path);
-						File imageFile = new File(path);
-						imageFile.deleteOnExit();
-						sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageFile));
+						sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(path)));
 						cordova.getActivity().startActivityForResult(sendIntent, 0);
 					} catch (Exception e) {
 						e.printStackTrace();
