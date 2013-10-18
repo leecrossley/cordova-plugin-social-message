@@ -25,6 +25,9 @@
                 <param name="android-package" value="uk.co.ilee.socialmessage.SocialMessage" />
             </feature>
         </config-file>
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        </config-file>
         <source-file src="src/android/SocialMessage.java" target-dir="src/uk/co/ilee/socialmessage" />
     </platform>
 </plugin>

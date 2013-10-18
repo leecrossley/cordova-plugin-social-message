@@ -56,7 +56,7 @@ var message = {
 window.socialmessage.send(message);
 ```
 
-### Share a message with a url (iOS only - for now)
+### Share a message with a url
 
 To add a link to your message, use the "url" property:
 
@@ -68,7 +68,7 @@ var message = {
 window.socialmessage.send(message);
 ```
 
-### Share a message with an image (iOS only - for now)
+### Share a message with an image
 
 To add an image to your message, use the "image" property:
 
