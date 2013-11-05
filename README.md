@@ -83,3 +83,7 @@ window.socialmessage.send(message);
 ## Platforms
 
 Currently supporting iOS and Android - check back soon for Windows Phone 8 support.
+
+## License
+
+[MIT License](http://ilee.mit-license.org)
