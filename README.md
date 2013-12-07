@@ -43,6 +43,8 @@ This example will only allow the user to post the message to Facebook or Twitter
 
 A complete list of activity types can be found [here](http://developer.apple.com/library/ios/#documentation/UIKit/Reference/UIActivity_Class/Reference/Reference.html#//apple_ref/occ/cl/UIActivity). You should omit the "UIActivityType" prefix when adding to your array.
 
+**NB:** Some activity types will only show as an option when they have accounts configured in the iOS settings on the device (e.g. Facebook and Twitter). This is different from having the apps installed.
+
 ### Share a message with a subject
 
 To add a subject to your message, use the "subject" property (used with activity types such as *Mail*):
