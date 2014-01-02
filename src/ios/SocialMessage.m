@@ -74,6 +74,26 @@
     {
         [exclusions addObject: UIActivityTypeSaveToCameraRoll];
     }
+    if (![activityTypes containsObject:@"AddToReadingList"])
+    {
+        [exclusions addObject: UIActivityTypeAddToReadingList];
+    }
+    if (![activityTypes containsObject:@"PostToFlickr"])
+    {
+        [exclusions addObject: UIActivityTypePostToFlickr];
+    }
+    if (![activityTypes containsObject:@"PostToVimeo"])
+    {
+        [exclusions addObject: UIActivityTypePostToVimeo];
+    }
+    if (![activityTypes containsObject:@"TencentWeibo"])
+    {
+        [exclusions addObject: UIActivityTypePostToTencentWeibo];
+    }
+    if (![activityTypes containsObject:@"AirDrop"])
+    {
+        [exclusions addObject: UIActivityTypeAirDrop];
+    }
 
     activity.excludedActivityTypes = exclusions;
 
