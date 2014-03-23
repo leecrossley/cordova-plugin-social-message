@@ -86,6 +86,10 @@ window.socialmessage.send(message);
 
 Currently supporting iOS and Android - check back soon for Windows Phone 8 support.
 
+### Android quirk
+
+Facebook does not permit you to share pre-filled text on Android, however images and urls will work.
+
 ## License
 
 [MIT License](http://ilee.mit-license.org)
