@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="socialmessage" version="0.2.4">
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" 
+    xmlns:rim="http://www.blackberry.com/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    id="uk.co.ilee.socialmessage" 
+    version="0.2.4">
     <name>Social Message</name>
     <author>Lee Crossley (http://ilee.co.uk/)</author>
     <description>Cordova Social Message Plugin to utilise native share features. Share text, images and urls to Facebook, Twitter and more.</description>
     <keywords>cordova, social, message, share, facebook, twitter, image, url</keywords>
     <engines>
-        <engine name="cordova" version=">=3.0.0" />
+        <engine name="cordova" version=">=3.4.0" />
     </engines>
     <js-module src="www/socialmessage.js" name="SocialMessage">
         <clobbers target="socialmessage" />
