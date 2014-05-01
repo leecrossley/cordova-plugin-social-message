@@ -21,7 +21,7 @@
         <framework src="Social.framework" />
     </platform>
     <platform name="android">
-        <config-file target="config.xml" parent="/*">
+        <config-file target="res/xml/config.xml" parent="/*">
             <feature name="SocialMessage">
                 <param name="android-package" value="uk.co.ilee.socialmessage.SocialMessage" />
             </feature>
