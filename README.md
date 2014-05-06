@@ -2,6 +2,10 @@
 
 Cordova Plugin to utilise native share features. Developed for Apache Cordova CLI >= 3.0.0. Share text, images and urls to Facebook, Twitter and more.
 
+#### Live demo
+
+See this plugin working in a live app: http://playadds.com
+
 ## 1 step install
 
 ```
