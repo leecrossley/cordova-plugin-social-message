@@ -86,6 +86,18 @@ var message = {
 window.socialmessage.send(message);
 ```
 
+### Add success/cancelled alerts after share (IOS Only)
+
+To turn on success/cancel alerts to your sharing after the share is done:
+
+```
+var message = {
+    text: "Image test",
+    showAlert: true
+};
+window.socialmessage.send(message);
+```
+
 ## Platforms
 
 Currently supporting iOS and Android - check back soon for Windows Phone 8 support.
