@@ -34,6 +34,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import org.apache.cordova.LOG;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 
 @SuppressLint("DefaultLocale")
 public class SocialMessage extends CordovaPlugin {
@@ -42,29 +43,24 @@ public class SocialMessage extends CordovaPlugin {
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		ctx = this.cordova.getActivity().getApplicationContext();
-		AlertDialog alertDialog = new AlertDialog.Builder(ctx).create();
-		alertDialog.setTitle("Alert");
-		alertDialog.setMessage("Alert message to be shown");
-		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-			new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
-		alertDialog.show();
-		return true;
-		/*
 		JSONObject json = args.getJSONObject(0);
 		String text = getJSONProperty(json, "text");
 		String subject = getJSONProperty(json, "subject");
 		String url = getJSONProperty(json, "url");
+		String shortUrl = getJSONProperty(json, "short_url");
 		String image = getJSONProperty(json, "image");
 		try {
-			doSendIntent(text, subject, image, url);
+			String returnString = doSendIntent(text, subject, image, url, shortUrl);
+
+			PluginResult result = new PluginResult(PluginResult.Status.OK, returnString);
+			result.setKeepCallback(true);
+		callbackContext.sendPluginResult(result);
 		} catch (IOException e) {
 			e.printStackTrace();
+			PluginResult result = new PluginResult(PluginResult.Status.OK, "ERROR");
+			result.setKeepCallback(true);
 		}
-		return true;*/
+		return true;
 	}
 	
 	private String getJSONProperty(JSONObject json, String property) throws JSONException {
@@ -74,77 +70,68 @@ public class SocialMessage extends CordovaPlugin {
 		return null;
 	}
 
-	private void doSendIntent(String text, String subject, String image, String url) throws IOException {
-		AlertDialog alertDialog = new AlertDialog.Builder(ctx).create();
-        alertDialog.setTitle("Alert");
-        alertDialog.setMessage("Alert message to be shown");
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-            new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-        alertDialog.show();
-		// SHARE
-	    //sharing implementation
+	private String doSendIntent(String text, String subject, String image, String url, String shortUrl) throws IOException {
         List<Intent> targetedShareIntents = new ArrayList<Intent>();
-        final Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sendIntent.setType("text/plain");
-        String shareBody = text + " " + url;
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        // intent.putExtra(Intent.EXTRA_SUBJECT, "Foo bar"); // NB: has no effect!
+        String returnString="";
 
-        PackageManager pm = ctx.getPackageManager();
-        List<ResolveInfo> activityList = pm.queryIntentActivities(sendIntent, 0);
-        // END SHARE
+		Uri picturePath = null;
 
-        for(final ResolveInfo app : activityList) {
+		if (image != null && image.length() > 0) {
+			final URL imageUrl = new URL(image);
+			String storageDir = Environment.getExternalStorageDirectory().getPath();
+			final String path = storageDir + "/" + image.substring(image.lastIndexOf("/") + 1, image.length());
+			cordova.getThreadPool().execute(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						saveImage(imageUrl, path);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 
-             String packageName = app.activityInfo.packageName;
-             LOG.w("Social Message", packageName);
+			picturePath =  Uri.fromFile(new File(path));
+		}
 
-			 if (subject != null && subject.length() > 0) {
-				sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
-			 }
-             if(TextUtils.equals(packageName, "com.facebook.katana")){
-                 sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, url);
-             } else {
-             		if (text != null && text.length() > 0) {
-             			sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
-             		}
-             		if (subject != null && subject.length() > 0) {
-             			sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
-             		}
-             		if (image != null && image.length() > 0) {
-             			sendIntent.setType("image/*");
-             			final URL imageUrl = new URL(image);
-             			String storageDir = Environment.getExternalStorageDirectory().getPath();
-             			final String path = storageDir + "/" + image.substring(image.lastIndexOf("/") + 1, image.length());
-             			cordova.getThreadPool().execute(new Runnable() {
-             				@Override
-             				public void run() {
-             					try {
-             						saveImage(imageUrl, path);
-             						sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(path)));
-             						cordova.getActivity().startActivityForResult(sendIntent, 0);
-             					} catch (Exception e) {
-             						e.printStackTrace();
-             					}
-             				}
-             			});
-             		} else {
-             			sendIntent.setType("text/plain");
-             		}
-             }
-
-             sendIntent.setPackage(packageName);
-             targetedShareIntents.add(sendIntent);
+        List<ResolveInfo> matches = ctx.getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo info : matches) {
+			if (info.activityInfo.packageName != null && info.activityInfo.packageName.length() > 0)
+			{
+				final Intent targetedShareIntent = new Intent(Intent.ACTION_SEND);
+				targetedShareIntent.setClassName(info.activityInfo.packageName,info.activityInfo.name);
+				if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook.katana")) {
+					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, url);
+					targetedShareIntent.setType("text/plain");
+				}
+				else
+				{
+					if (subject != null && subject.length() > 0) {
+						targetedShareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+					}
+					if (text != null && text.length() > 0) {
+						targetedShareIntent.putExtra(android.content.Intent.EXTRA_TEXT, subject+ " | " + text + "\n" + shortUrl);
+					}
+					if (picturePath != null) {
+						targetedShareIntent.setType("image/*");
+						targetedShareIntent.putExtra(Intent.EXTRA_STREAM, picturePath);
+					}
+					else {
+						targetedShareIntent.setType("text/plain");
+					}
+				}
+				targetedShareIntents.add(targetedShareIntent);
+            }
         }
 
-
 		Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), "Share Etikt");
-
 		chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
-		ctx.startActivity(chooserIntent);
+        cordova.getActivity().startActivityForResult(chooserIntent, 0);
 
+		return returnString;
 	}
 	
 	public static void saveImage(URL url, String outputPath) throws IOException {
