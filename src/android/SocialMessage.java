@@ -34,15 +34,8 @@ public class SocialMessage extends CordovaPlugin {
 		String subject = getJSONProperty(json, "subject");
 		String url = getJSONProperty(json, "url");
 		String image = getJSONProperty(json, "image");
-		if (url != null && url.length() > 0) {
-			if (text == null) {
-				text = url;
-			} else {
-				text = text + " " + url;
-			}
-		}
 		try {
-			doSendIntent(text, subject, image);
+			doSendIntent(text, subject, image, url);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -56,35 +49,71 @@ public class SocialMessage extends CordovaPlugin {
 		return null;
 	}
 
-	private void doSendIntent(String text, String subject, String image) throws IOException {
-		final Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
-		if (text != null && text.length() > 0) {
-			sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
-		}
-		if (subject != null && subject.length() > 0) {
-			sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
-		}
-		if (image != null && image.length() > 0) {
-			sendIntent.setType("image/*");
-			final URL url = new URL(image);
-			String storageDir = Environment.getExternalStorageDirectory().getPath();
-			final String path = storageDir + "/" + image.substring(image.lastIndexOf("/") + 1, image.length());
-			cordova.getThreadPool().execute(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						saveImage(url, path);
-						sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(path)));
-						cordova.getActivity().startActivityForResult(sendIntent, 0);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
-		} else {
-			sendIntent.setType("text/plain");
-			cordova.startActivityForResult(this, sendIntent, 0);
-		}
+	private void doSendIntent(String text, String subject, String image, String url) throws IOException {
+		// SHARE
+	    //sharing implementation
+        List<Intent> targetedShareIntents = new ArrayList<Intent>();
+        final Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sendIntent.setType("text/plain");
+        String shareBody = text + " " + url;
+
+        PackageManager pm = view.getContext().getPackageManager();
+        List<ResolveInfo> activityList = pm.queryIntentActivities(sharingIntent, 0);
+
+        Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), "Share Etikt");
+
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+        startActivity(chooserIntent);
+        // END SHARE
+
+        for(final ResolveInfo app : activityList) {
+
+             String packageName = app.activityInfo.packageName;
+
+			 if (subject != null && subject.length() > 0) {
+				sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+			 }
+             if(TextUtils.equals(packageName, "com.facebook.katana")){
+                 sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, url);
+             } else {
+             		if (text != null && text.length() > 0) {
+             			sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
+             		}
+             		if (subject != null && subject.length() > 0) {
+             			sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+             		}
+             		if (image != null && image.length() > 0) {
+             			sendIntent.setType("image/*");
+             			final URL url = new URL(image);
+             			String storageDir = Environment.getExternalStorageDirectory().getPath();
+             			final String path = storageDir + "/" + image.substring(image.lastIndexOf("/") + 1, image.length());
+             			cordova.getThreadPool().execute(new Runnable() {
+             				@Override
+             				public void run() {
+             					try {
+             						saveImage(url, path);
+             						sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(path)));
+             						cordova.getActivity().startActivityForResult(sendIntent, 0);
+             					} catch (Exception e) {
+             						e.printStackTrace();
+             					}
+             				}
+             			});
+             		} else {
+             			sendIntent.setType("text/plain");
+             		}
+             }
+
+             sendIntent.setPackage(packageName);
+             targetedShareIntents.add(sendIntent);
+        }
+
+
+		Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), "Share Etikt");
+
+		chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+		startActivity(chooserIntent);
+
 	}
 	
 	public static void saveImage(URL url, String outputPath) throws IOException {
