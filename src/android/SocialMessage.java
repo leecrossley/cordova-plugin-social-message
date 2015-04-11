@@ -49,8 +49,9 @@ public class SocialMessage extends CordovaPlugin {
 		String url = getJSONProperty(json, "url");
 		String shortUrl = getJSONProperty(json, "short_url");
 		String image = getJSONProperty(json, "image");
+		String etiktId = getJSONProperty(json, "etikt_id");
 		try {
-			String returnString = doSendIntent(text, subject, image, url, shortUrl);
+			String returnString = doSendIntent(text, subject, image, url, shortUrl, etiktId);
 
 			PluginResult result = new PluginResult(PluginResult.Status.OK, returnString);
 			result.setKeepCallback(true);
@@ -70,7 +71,7 @@ public class SocialMessage extends CordovaPlugin {
 		return null;
 	}
 
-	private String doSendIntent(String text, String subject, String image, String url, String shortUrl) throws IOException {
+	private String doSendIntent(String text, String subject, String image, String url, String shortUrl, String etiktId) throws IOException {
         List<Intent> targetedShareIntents = new ArrayList<Intent>();
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
@@ -103,8 +104,12 @@ public class SocialMessage extends CordovaPlugin {
 			{
 				final Intent targetedShareIntent = new Intent(Intent.ACTION_SEND);
 				targetedShareIntent.setClassName(info.activityInfo.packageName,info.activityInfo.name);
-				if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook.katana")) {
+				if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook")) {
 					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, url);
+					targetedShareIntent.setType("text/plain");
+				}
+				if (info.activityInfo.packageName.toLowerCase().startsWith("com.effetb.etikt")) {
+					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, "ETIKT_ID="+etiktId);
 					targetedShareIntent.setType("text/plain");
 				}
 				else
@@ -127,7 +132,7 @@ public class SocialMessage extends CordovaPlugin {
             }
         }
 
-		Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), "Share Etikt");
+		Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), "Partager une annonce");
 		chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
         cordova.getActivity().startActivityForResult(chooserIntent, 0);
 
