@@ -1,4 +1,4 @@
-## Social Message Plugin for Apache Cordova
+## Social Message Plugin for Apache Cordova [![npm version](https://badge.fury.io/js/cordova-plugin-social-message.svg)](http://badge.fury.io/js/cordova-plugin-social-message)
 
 Cordova Plugin to utilise native share features. Developed for Apache Cordova CLI >= 3.0.0. Share text, images and urls to Facebook, Twitter and more.
 
