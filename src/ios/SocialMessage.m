@@ -5,7 +5,10 @@
 
 #import "SocialMessage.h"
 
-@implementation SocialMessage
+@implementation SocialMessage {
+    NSArray *activityArray ;
+    NSArray *blackActivityArray ;
+}
 
 - (void) send:(CDVInvokedUrlCommand*)command;
 {
@@ -14,7 +17,8 @@
     NSString *url = [args objectForKey:@"url"];
     NSString *image = [args objectForKey:@"image"];
     NSString *subject = [args objectForKey:@"subject"];
-    NSArray *activityTypes = [[args objectForKey:@"activityTypes"] componentsSeparatedByString:@","];
+    NSString *activityTypes = [args objectForKey:@"activityTypes"];
+    NSString *blackActivityTypes = [args objectForKey:@"blackActivityTypes"];
 
     NSMutableArray *items = [NSMutableArray new];
     if (text)
@@ -32,75 +36,102 @@
         [items addObject:imageFromUrl];
     }
 
+    if (activityTypes)
+        activityArray = [activityTypes componentsSeparatedByString:@","];
+
+    if (blackActivityTypes)
+        blackActivityArray = [blackActivityTypes componentsSeparatedByString:@","];
+
+
     UIActivityViewController *activity = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:Nil];
     [activity setValue:subject forKey:@"subject"];
 
+    NSMutableArray *exclusions = [self manageExclusions];
+    activity.excludedActivityTypes = exclusions;
+
+
+
+
+    [self.viewController presentViewController:activity animated:YES completion:Nil];
+}
+
+-(Boolean)isAllowed:(NSString *) name
+{
+    if ( [blackActivityArray count] != 0 && [blackActivityArray containsObject: name] )
+        return false;
+
+    if ( [activityArray count] != 0 && ![activityArray containsObject: name] )
+        return false ;
+
+    return true;
+}
+
+-(NSMutableArray *)manageExclusions
+ {
     NSMutableArray *exclusions = [[NSMutableArray alloc] init];
 
-    if (![activityTypes containsObject:@"PostToFacebook"])
+    if (![self isAllowed:@"PostToFacebook"])
     {
         [exclusions addObject: UIActivityTypePostToFacebook];
     }
-    if (![activityTypes containsObject:@"PostToTwitter"])
+    if (![self isAllowed:@"PostToTwitter"])
     {
         [exclusions addObject: UIActivityTypePostToTwitter];
     }
-    if (![activityTypes containsObject:@"PostToWeibo"])
+    if (![self isAllowed:@"PostToWeibo"])
     {
         [exclusions addObject: UIActivityTypePostToWeibo];
     }
-    if (![activityTypes containsObject:@"Message"])
+    if (![self isAllowed:@"Message"])
     {
         [exclusions addObject: UIActivityTypeMessage];
     }
-    if (![activityTypes containsObject:@"Mail"])
+    if (![self isAllowed:@"Mail"])
     {
         [exclusions addObject: UIActivityTypeMail];
     }
-    if (![activityTypes containsObject:@"Print"])
+    if (![self isAllowed:@"Print"])
     {
         [exclusions addObject: UIActivityTypePrint];
     }
-    if (![activityTypes containsObject:@"CopyToPasteboard"])
+    if (![self isAllowed:@"CopyToPasteboard"])
     {
         [exclusions addObject: UIActivityTypeCopyToPasteboard];
     }
-    if (![activityTypes containsObject:@"AssignToContact"])
+    if (![self isAllowed:@"AssignToContact"])
     {
         [exclusions addObject: UIActivityTypeAssignToContact];
     }
-    if (![activityTypes containsObject:@"SaveToCameraRoll"])
+    if (![self isAllowed:@"SaveToCameraRoll"])
     {
         [exclusions addObject: UIActivityTypeSaveToCameraRoll];
     }
 
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
     {
-        if (![activityTypes containsObject:@"AddToReadingList"])
+        if (![self isAllowed:@"AddToReadingList"])
         {
             [exclusions addObject: UIActivityTypeAddToReadingList];
         }
-        if (![activityTypes containsObject:@"PostToFlickr"])
+        if (![self isAllowed:@"PostToFlickr"])
         {
             [exclusions addObject: UIActivityTypePostToFlickr];
         }
-        if (![activityTypes containsObject:@"PostToVimeo"])
+        if (![self isAllowed:@"PostToVimeo"])
         {
             [exclusions addObject: UIActivityTypePostToVimeo];
         }
-        if (![activityTypes containsObject:@"TencentWeibo"])
+        if (![self isAllowed:@"TencentWeibo"])
         {
             [exclusions addObject: UIActivityTypePostToTencentWeibo];
         }
-        if (![activityTypes containsObject:@"AirDrop"])
+        if (![self isAllowed:@"AirDrop"])
         {
             [exclusions addObject: UIActivityTypeAirDrop];
         }
     }
 
-    activity.excludedActivityTypes = exclusions;
-
-    [self.viewController presentViewController:activity animated:YES completion:Nil];
+    return exclusions;
 }
 
 @end
