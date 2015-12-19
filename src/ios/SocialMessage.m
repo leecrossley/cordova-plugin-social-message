@@ -98,6 +98,13 @@
         }
     }
 
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+    {
+        UIButton* invisibleShareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        invisibleShareButton.bounds = CGRectMake(0 ,0, 0, 0);
+        activity.popoverPresentationController.sourceView = invisibleShareButton;
+    }
+
     activity.excludedActivityTypes = exclusions;
 
     [self.viewController presentViewController:activity animated:YES completion:Nil];

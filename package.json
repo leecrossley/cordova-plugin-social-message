@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-social-message",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "author": "Lee Crossley <leee@hotmail.co.uk> (http://ilee.co.uk/)",
   "description": "Cordova Social Message Plugin to utilise native share features. Share text, images and urls to Facebook, Twitter and more.",
   "cordova": {
