@@ -14,6 +14,7 @@
     NSString *url = [args objectForKey:@"url"];
     NSString *image = [args objectForKey:@"image"];
     NSString *subject = [args objectForKey:@"subject"];
+    NSString *showAlert = [args objectForKey:@"showAlert"];
     NSArray *activityTypes = [[args objectForKey:@"activityTypes"] componentsSeparatedByString:@","];
 
     NSMutableArray *items = [NSMutableArray new];
@@ -106,6 +107,28 @@
     }
 
     activity.excludedActivityTypes = exclusions;
+    
+    if (showAlert)
+    {
+        BOOL doAlert = [showAlert boolValue];
+        if (doAlert) {
+            [activity setCompletionHandler:^(NSString *act, BOOL done)
+             {
+                NSString *serviceMsg = @"Share was cancelled";
+                 
+                if(done)
+                {
+                    serviceMsg = @"Share completed successfully.";
+                    if ( [act isEqualToString:UIActivityTypeMail] )           serviceMsg = @"Mail sent successfully";
+                    if ( [act isEqualToString:UIActivityTypePostToTwitter] )  serviceMsg = @"Post was successful";
+                    if ( [act isEqualToString:UIActivityTypePostToFacebook] ) serviceMsg = @"Post was successful";
+                }
+                 
+                 UIAlertView *Alert = [[UIAlertView alloc] initWithTitle:serviceMsg message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                 [Alert show];
+             }];
+        }
+    }
 
     [self.viewController presentViewController:activity animated:YES completion:Nil];
 }
