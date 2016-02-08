@@ -49,9 +49,9 @@ public class SocialMessage extends CordovaPlugin {
 		String url = getJSONProperty(json, "url");
 		String shortUrl = getJSONProperty(json, "short_url");
 		String image = getJSONProperty(json, "image");
-		String etiktId = getJSONProperty(json, "etikt_id");
+		String chooserTitle = getJSONProperty(json, "chooser_title");
 		try {
-			String returnString = doSendIntent(text, subject, image, url, shortUrl, etiktId);
+			String returnString = doSendIntent(text, subject, image, url, shortUrl, chooserTitle);
 
 			PluginResult result = new PluginResult(PluginResult.Status.OK, returnString);
 			result.setKeepCallback(true);
@@ -71,14 +71,18 @@ public class SocialMessage extends CordovaPlugin {
 		return null;
 	}
 
-	private String doSendIntent(String text, String subject, String image, String url, String shortUrl, String etiktId) throws IOException {
+	private String doSendIntent(String text, String subject, String image, String url, String shortUrl, String chooserTitle) throws IOException {
         List<Intent> targetedShareIntents = new ArrayList<Intent>();
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        // intent.putExtra(Intent.EXTRA_SUBJECT, "Foo bar"); // NB: has no effect!
         String returnString="";
 
 		Uri picturePath = null;
+
+		if (chooserTitle == null)
+		{
+			chooserTitle = "Share...";
+		}
 
 		if (image != null && image.length() > 0) {
 			final URL imageUrl = new URL(image);
@@ -104,12 +108,8 @@ public class SocialMessage extends CordovaPlugin {
 			{
 				final Intent targetedShareIntent = new Intent(Intent.ACTION_SEND);
 				targetedShareIntent.setClassName(info.activityInfo.packageName,info.activityInfo.name);
-				if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook")) {
+				if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook") && url != null) {
 					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, url);
-					targetedShareIntent.setType("text/plain");
-				}
-				else if (info.activityInfo.packageName.toLowerCase().startsWith("com.ionicframework.etiktmobile614257")) {
-					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, "ETIKT_ID="+etiktId);
 					targetedShareIntent.setType("text/plain");
 				}
 				else
@@ -132,7 +132,7 @@ public class SocialMessage extends CordovaPlugin {
             }
         }
 
-		Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), "Partager une annonce");
+		Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), chooserTitle);
 		chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
         cordova.getActivity().startActivityForResult(chooserIntent, 0);
 

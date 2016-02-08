@@ -1,4 +1,3 @@
-cordova.define("uk.co.ilee.socialmessage.SocialMessage", function(require, exports, module) { 
 var exec = require("cordova/exec");
 
 var SocialMessage = function () {
@@ -20,5 +19,3 @@ SocialMessage.prototype.send = function (message) {
 };
 
 module.exports = new SocialMessage();
-
-});
