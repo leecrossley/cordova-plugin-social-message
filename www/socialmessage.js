@@ -1,4 +1,3 @@
-
 var exec = require("cordova/exec");
 
 var SocialMessage = function () {
@@ -15,6 +14,7 @@ SocialMessage.prototype.send = function (message) {
         message.activityTypes = allActivityTypes;
     }
     message.activityTypes = message.activityTypes.join(",");
+
     exec(null, null, "SocialMessage", "send", [message]);
 };
 
