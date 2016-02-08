@@ -1,12 +1,16 @@
-## Social Message Plugin for Apache Cordova
+## Social Message Plugin for Apache Cordova [![npm version](https://badge.fury.io/js/cordova-plugin-social-message.svg)](http://badge.fury.io/js/cordova-plugin-social-message)
 
 Cordova Plugin to utilise native share features. Developed for Apache Cordova CLI >= 3.0.0. Share text, images and urls to Facebook, Twitter and more.
 
-#### Live demo
+## Install
 
-See this plugin working in a live app: http://playadds.com
+#### Latest published version on npm (with Cordova CLI >= 5.0.0)
 
-## 1 step install
+```
+cordova plugin add cordova-plugin-social-message
+```
+
+#### Latest version from GitHub
 
 ```
 cordova plugin add https://github.com/leecrossley/cordova-plugin-social-message.git
@@ -88,7 +92,7 @@ window.socialmessage.send(message);
 
 ## Platforms
 
-Currently supporting iOS and Android - check back soon for Windows Phone 8 support.
+iOS and Android.
 
 ### Android quirk
 

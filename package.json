@@ -1,0 +1,41 @@
+{
+  "name": "cordova-plugin-social-message",
+  "version": "0.4.0",
+  "author": "Lee Crossley <leee@hotmail.co.uk> (http://ilee.co.uk/)",
+  "description": "Cordova Social Message Plugin to utilise native share features. Share text, images and urls to Facebook, Twitter and more.",
+  "cordova": {
+    "id": "cordova-plugin-social-message",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leecrossley/cordova-plugin-social-message.git"
+  },
+  "keywords": [
+    "cordova",
+    "social",
+    "message",
+    "share",
+    "facebook",
+    "twitter",
+    "image",
+    "url",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leecrossley/cordova-plugin-social-message/issues"
+  },
+  "homepage": "https://github.com/leecrossley/cordova-plugin-social-message#readme"
+}
