@@ -108,7 +108,7 @@ public class SocialMessage extends CordovaPlugin {
 					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, url);
 					targetedShareIntent.setType("text/plain");
 				}
-				if (info.activityInfo.packageName.toLowerCase().startsWith("com.ionicframework.etiktmobile614257")) {
+				else if (info.activityInfo.packageName.toLowerCase().startsWith("com.ionicframework.etiktmobile614257")) {
 					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, "ETIKT_ID="+etiktId);
 					targetedShareIntent.setType("text/plain");
 				}
