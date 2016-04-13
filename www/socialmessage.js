@@ -7,7 +7,7 @@ var SocialMessage = function () {
 
 var allActivityTypes = ["PostToFacebook", "PostToTwitter", "PostToWeibo", "Message", "Mail", "Print", "CopyToPasteboard", "AssignToContact", "SaveToCameraRoll", "AddToReadingList", "PostToFlickr", "PostToVimeo", "TencentWeibo", "AirDrop"];
 
-SocialMessage.prototype.send = function (message) {
+SocialMessage.prototype.send = function (message, callback) {
     if (!message) {
         return;
     }
@@ -15,7 +15,13 @@ SocialMessage.prototype.send = function (message) {
         message.activityTypes = allActivityTypes;
     }
     message.activityTypes = message.activityTypes.join(",");
-    exec(null, null, "SocialMessage", "send", [message]);
+    exec(
+        res => callback(null, res),
+        err => callback(err),
+        "SocialMessage",
+        "send",
+        [message]
+    );
 };
 
 module.exports = new SocialMessage();
