@@ -16,7 +16,7 @@ SocialMessage.prototype.send = function (message, callback) {
     }
     message.activityTypes = message.activityTypes.join(",");
     exec(
-        res => callback(res),
+        res => callback(null, res),
         err => callback(err),
         "SocialMessage",
         "send",
